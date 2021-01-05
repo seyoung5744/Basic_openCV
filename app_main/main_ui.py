@@ -1,32 +1,41 @@
 import tkinter as tk
 import cv2
 from PIL import Image
-from PIL import ImageTk
+from PIL import ImageTk # tkinter에서 사용할 이미지로 변환하기 위한 PIL
 
 class AppWindow(tk.Frame):#frame
     def __init__(self, master=None, size=None, path=None):
-        super().__init__(master)
+        super().__init__(master) # Tk() 객체. 윈도우
         self.master = master
         self.master.geometry(size)
         self.master.resizable(True, True)
-        self.pack()#opencv frame
+        self.pack()#opencv frame, 이미지 레이블 frame
+
         self.sub_fr = None#frame
-        self.src = None #tk의 label에 출력할 영상
+        self.src = None #tk의 label에 출력할 영상. 이미지 변수
         self.frame = None #tk의 영상을 출력할 레이블
         self.create_widgets(path)
 
     def make_img(self, path):#path 경로의 이미지를 레이블에 출력
-        src = cv2.imread(path)
+        src = cv2.imread(path) # path 이미지를 읽어서 src에 저장
         src = cv2.resize(src, (640, 400))
+        # 이미지 color space를 rgb로 변경
         img = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
+        # 넘파이 배열을 필로우 이미비 변환
         img = Image.fromarray(img)#넘파이 배열을 이미지로 변환
+        # tkinter에서 사용할 수 있는 이미지로 변환
+        # self.src = 이미지
         self.src = ImageTk.PhotoImage(image=img)#tkinter에서 인식할 수 있는 이미지로 생성
 
     def create_widgets(self, path):#프레임에 위젯 추가
         self.make_img(path)
+        # 이미지 뿌릴 레이블 생성
         self.frame = tk.Label(self.master, image=self.src)
+        # 레이블을 프레임에 붙임
         self.frame.pack()
+        # 추가 위젯을 배치할 프레임 생성
         self.sub_fr = tk.Frame(self.master)#frame
+        # 프레임 윈도우 붙임
         self.sub_fr.pack()
 
     def change_img(self, img):#레이블의 이미지 변경
@@ -35,3 +44,4 @@ class AppWindow(tk.Frame):#frame
         img = Image.fromarray(img)
         self.src = ImageTk.PhotoImage(image=img)
         self.frame['image']=self.src
+
