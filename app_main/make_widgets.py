@@ -21,6 +21,10 @@ def btn3_clicked(app):
 def btn4_clicked():
     c_serv.stop()
 
+def btn5_clicked(app):
+    fname = app.ent.get()
+    c_serv.view_video(fname)
+
 def slide_start():
     s_serv.start()
 
@@ -54,6 +58,6 @@ def make(app, service=None):
     app.btn2['command'] = lambda: btn2_clicked(app)
     app.btn3['command'] = lambda: btn3_clicked(app)
     app.btn4['command'] = btn4_clicked
+    app.btn5['command'] = lambda: btn5_clicked(app)
     app.btn6['command'] = slide_start
     app.btn7['command'] = slide_stop
-    # app.btn7['command']

@@ -33,6 +33,19 @@ def video_write_th(stop, app, fname):
         cv2.waitKey(100) # 0.1 s
     cam.release()
 
+def video_read_th(stop, app, fname):
+    path = './video/' + fname + '.avi'
+    cap = cv2.VideoCapture(path)
+    while cap.isOpened() and stop(): # 동영상 파일이 정상 오픈이면
+        ret, frame = cap.read()
+        if ret:
+            frame = cv2.resize(frame, (640, 400))
+            app.change_img(frame)
+        else:
+            break
+        cv2.waitKey(100)
+    cap.release()
+
 class CameraService:
     def __init__(self, app):
         self.cam = None
@@ -68,5 +81,8 @@ class CameraService:
        pass
 
 
-def view_video(self):
-        pass
+    def view_video(self, fname):
+        self.flag = True
+        cam_th = threading.Thread(target=video_read_th,
+                                  args=(lambda: self.flag, self.app, fname))
+        cam_th.start()
